@@ -58,7 +58,7 @@ module.exports = {
   mode: 'development',
   devServer:{
     contentBase: resolve(__dirname, 'built'),
-    compress: true,
+    compress: true, // 一切服务都启用gzip 压缩：
     port: 8888,
     open: true
   }

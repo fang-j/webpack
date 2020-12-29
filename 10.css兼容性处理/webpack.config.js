@@ -67,6 +67,7 @@ module.exports = {
   mode: 'development',
   devServer:{
     open: true,
-    port: 8888
+    port: 8888,
+    hot: true
   }
 }

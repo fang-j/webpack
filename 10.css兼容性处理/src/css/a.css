@@ -5,3 +5,9 @@
   display: flex;
   backface-visibility: hidden;
 }
+input[type=text]{
+color:red;
+}
+.input{
+  color: deeppink;
+}
