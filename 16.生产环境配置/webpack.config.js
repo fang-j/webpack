@@ -132,5 +132,9 @@ module.exports = {
     }),
     new OptimizeCssAssetsWebpackPlugin()
   ],
-  mode: 'production' // 生产环境下,js自动压缩
+  mode: 'production', // 生产环境下,js自动压缩
+  devServer: {
+    port: 8888,
+    open: true
+  }
 }
