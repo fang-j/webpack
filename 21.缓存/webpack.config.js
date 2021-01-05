@@ -3,6 +3,22 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin'); // 压缩css代码
 
+/*
+    缓存
+    babel缓存
+      cacheDirectory: true
+    文件资源缓存
+      hash: 每次webpack构建时会生成一个唯一的hash值
+        问题: 因为js和css同时使用一个hash值
+          如果重新打包,会导致所有缓存失效.(可能我却只改动一个文件)
+      chunkhash: 根据chunk生成的hash值.如果打包来源同一个chunk,hash值就一样
+        问题: js和css的hash值还是一样的
+          因为css是在js中被引入的,所以同属于一个chunk
+      contenthash: 根据文件的内容生成hash值 不同文件hash值一定不一样
+ */
+
+
+
 // 定义nodejs环境,决定使用browserslist哪个环境
 process.env.NODE_ENV = 'production';
 
@@ -30,8 +46,8 @@ const commonCssLoader = [
 module.exports = {
   entry: './src/js/index.js',
   output:{
-    filename: 'js/built.js',
-    path: resolve(__dirname, 'dist')
+    filename: 'js/built.[contenthash:10].js',
+    path: resolve(__dirname, 'built')
   },
   module:{
     rules: [
@@ -89,7 +105,10 @@ module.exports = {
                     }
                   }
                 ]
-              ]
+              ],
+              // 开启babel缓存
+              // 第二次构建时,会读取之前的缓存
+              cacheDirectory: true
             }
           },
           // 图片
@@ -127,21 +146,22 @@ module.exports = {
   },
   plugins: [
     new HtmlWebPackPlugin({
-      template: './src/index.html',
+      template: './src/index.html'
       // 压缩html
-      minify: {
-        collapseInlineTagWhitespace: true,
-        removeComments: true
-      }
+      // minify: {
+      //   collapseInlineTagWhitespace: true,
+      //   removeComments: true
+      // }
     }),
     new MiniCssExtractPlugin({
-      filename: 'css/built.css'
+      filename: 'css/built.[contenthash:10].css'
     }),
     new OptimizeCssAssetsWebpackPlugin()
   ],
-  mode: 'production', // 生产环境下,js自动压缩
-  devServer: {
-    port: 3000,
-    open: true
-  }
+  mode: 'development', // 生产环境下,js自动压缩
+  devtool: 'source-map'
+  // devServer: {
+  //   port: 3000,
+  //   open: true
+  // }
 }
