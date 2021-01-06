@@ -4,19 +4,14 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin'); // 压缩css代码
 
 /*
-    缓存
-    babel缓存
-      cacheDirectory: true
-      -->让第二次打包构建速度更快
-    文件资源缓存
-      hash: 每次webpack构建时会生成一个唯一的hash值
-        问题: 因为js和css同时使用一个hash值
-          如果重新打包,会导致所有缓存失效.(可能我却只改动一个文件)
-      chunkhash: 根据chunk生成的hash值.如果打包来源同一个chunk,hash值就一样
-        问题: js和css的hash值还是一样的
-          因为css是在js中被引入的,所以同属于一个chunk
-      contenthash: 根据文件的内容生成hash值 不同文件hash值一定不一样
-      -->让代码上线运行缓存更好使用
+    tree shaking: 去除无用代码
+      前提:1.必须使用ES6模块化 2.开启production环境
+      作用: 减少代码体积
+
+      在package.json中配置
+      "sideEffects": false  所有代码都没有副作用(都可以进行tree shaking)
+        问题: 可能会把css / @babel/polyfill (副作用)文件干掉
+        "sideEffects": ["*.css"]
  */
 
 
